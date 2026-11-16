@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dark-Knight</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="" width="28" height="28">
+    <h1>Dark-Knight</h1>
+    <label class="switch" title="Turn dark mode on or off everywhere">
+      <input type="checkbox" id="enabled">
+      <span></span>
+    </label>
+  </header>
+
+  <section id="siteRow">
+    <div class="label">This site <span id="host"></span></div>
+    <div class="seg" id="site">
+      <button data-v="default">Default</button>
+      <button data-v="dynamic">Smart</button>
+      <button data-v="filter">Invert</button>
+      <button data-v="off">Off</button>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Default mode</div>
+    <div class="seg" id="mode">
+      <button data-v="dynamic">Smart</button>
+      <button data-v="filter">Invert</button>
+    </div>
+  </section>
+
+  <section>
+    <label class="slider">Brightness <output id="brightnessOut"></output>
+      <input type="range" id="brightness" min="50" max="150">
+    </label>
+    <label class="slider">Contrast <output id="contrastOut"></output>
+      <input type="range" id="contrast" min="50" max="150">
+    </label>
+    <label class="slider">Image brightness <output id="imageBrightnessOut"></output>
+      <input type="range" id="imageBrightness" min="40" max="100">
+    </label>
+  </section>
+
+  <footer>
+    <span id="shortcut"></span>
+    <button id="reset" class="link">Reset</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

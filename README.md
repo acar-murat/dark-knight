@@ -5,6 +5,11 @@
 <p align="center">Open-source dark mode for every website, in every major browser.<br>
 No tracking, no accounts, no build step.</p>
 
+<p align="center">
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/dark-knight-vision/"><img src="https://img.shields.io/amo/v/dark-knight-vision?label=Firefox%20Add-ons&logo=firefoxbrowser&logoColor=white&color=FF7139" alt="Get Dark-Knight for Firefox"></a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/dark-knight-vision/"><img src="https://img.shields.io/amo/users/dark-knight-vision?color=FF7139" alt="Firefox users"></a>
+</p>
+
 ---
 
 ## Why another dark mode?
@@ -33,7 +38,11 @@ Dark-Knight rewrites the site's **own colours** instead:
 | Shortcut | `Alt+Shift+D` toggles the current site |
 | Sync | Settings follow you via the browser's own sync storage |
 
-## Install (developer mode)
+## Install
+
+**Firefox (desktop & Android):** [Add to Firefox](https://addons.mozilla.org/en-US/firefox/addon/dark-knight-vision/)
+
+### Developer mode (load from source)
 
 | Browser | Steps |
 |---|---|

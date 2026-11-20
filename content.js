@@ -96,12 +96,30 @@
 
   // Colour-looking tokens, never matching inside identifiers such as var(--red-500).
   const TOKEN = /(?<![\w-])(?:#[0-9a-f]{3,8}(?![\w-])|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^()]*\)|[a-z]{3,}(?![\w(-]))/gi;
+  // Tailwind-style colours whose alpha is a variable: rgb(0 0 0 / var(--tw-text-opacity, 1)).
+  // The channels are converted and the alpha expression is kept as-is.
+  const ALPHA_VAR = /\b(rgba?|hsla?)\(\s*([^()]+?)\s*[/,]\s*(var\((?:[^()]|\([^()]*\))*\))\s*\)/gi;
+  function convertAlphaVar(match, fn, channels, alpha, kind) {
+    const base = `${fn.replace(/a$/i, '')}(${channels.replace(/,\s*$/, '')})`;
+    const c = parseColor(base);
+    if (!c) return match;
+    const [r, g, b] = C.transform(kind, c[0], c[1], c[2], settings);
+    return `rgb(${r} ${g} ${b} / ${alpha})`;
+  }
+
   function replaceColors(value, kind) {
     return value
       .split(/(url\([^)]*\))/i)
-      .map((part, i) => (i % 2 ? part : part.replace(TOKEN, (t) => modifyColor(kind, t) || t)))
+      .map((part, i) => {
+        if (i % 2) return part;
+        if (part.includes('var(')) part = part.replace(ALPHA_VAR, (m, fn, ch, a) => convertAlphaVar(m, fn, ch, a, kind));
+        return part.replace(TOKEN, (t) => modifyColor(kind, t) || t);
+      })
       .join('');
   }
+
+  // True when a value contains at least one literal colour (e.g. "#fff var(--pos)").
+  const HAS_COLOR = /#[0-9a-f]{3,8}(?![\w-])|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(/i;
 
   function absolute(raw, base) {
     try { return new URL(raw, base).href; } catch { return null; }
@@ -196,7 +214,7 @@
   function finalizeVars() {
     colorVars = new Set();
     for (const [n, vals] of varDefs) {
-      if (vals.some((v) => parseColor(v) || /gradient\(/i.test(v))) colorVars.add(n);
+      if (vals.some((v) => parseColor(v) || /gradient\(/i.test(v) || HAS_COLOR.test(v))) colorVars.add(n);
     }
     // Variables that alias colour variables are colour variables too.
     for (let grew = true, guard = 0; grew && guard < 10; guard++) {
